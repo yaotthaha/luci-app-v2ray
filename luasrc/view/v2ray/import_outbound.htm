@@ -78,7 +78,7 @@ local dsp = require "luci.dispatcher"
 		btn.disabled = true;
 		btn.value    = '<%:Importing...%>';
 
-		(new XHR()).post('<%=dsp.build_url("admin/services/v2ray/import-outbound")%>',
+		(new XHR()).post('<%=dsp.build_url("admin/services/xray/import-outbound")%>',
 			{ token: '<%=token%>', link: link },
 			function(x, data)
 			{

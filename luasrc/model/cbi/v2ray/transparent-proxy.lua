@@ -5,13 +5,13 @@ local uci = require "luci.model.uci".cursor()
 local fs = require "nixio.fs"
 local sys = require "luci.sys"
 local nwm = require "luci.model.network".init()
-local v2ray = require "luci.model.v2ray"
+local xray = require "luci.model.xray"
 
 local m, s, o
 
 local dokodemo_door_list = {}
 
-uci:foreach("v2ray", "inbound", function(s)
+uci:foreach("xray", "inbound", function(s)
   local port = s.port or ""
   local protocol = s.protocol or ""
   if protocol == "dokodemo-door" and port ~= "" then
@@ -43,11 +43,11 @@ end
 
 local list_changed = false
 
-m = Map("v2ray", "%s - %s" % { translate("V2Ray"), translate("Transparent Proxy") })
+m = Map("xray", "%s - %s" % { translate("Xray"), translate("Transparent Proxy") })
 m.apply_on_parse = true
 m.on_after_apply = function ()
 	if list_changed then
-		sys.call("/etc/init.d/v2ray reload 2>/dev/null")
+		sys.call("/etc/init.d/xray reload 2>/dev/null")
 		list_changed = false
 	end
 end
@@ -85,14 +85,14 @@ o = s:option(Flag, "use_tproxy", translate("Use TProxy"), translate("Setup redir
 o = s:option(Flag, "only_privileged_ports", translate("Only privileged ports"),
 	translate("Only redirect traffic on ports below 1024."))
 
-o = s:option(Flag, "redirect_udp", translate("Redirect UDP"), translate("Redirect UDP traffic to V2Ray."))
+o = s:option(Flag, "redirect_udp", translate("Redirect UDP"), translate("Redirect UDP traffic to Xray."))
 
-o = s:option(Flag, "redirect_dns", translate("Redirect DNS"), translate("Redirect DNS traffic to V2Ray."))
+o = s:option(Flag, "redirect_dns", translate("Redirect DNS"), translate("Redirect DNS traffic to Xray."))
 o:depends("redirect_udp", "")
 o:depends("redirect_udp", "0")
 
 o = s:option(ListValue, "proxy_mode", translate("Proxy mode"),
-	translate("If enabled, iptables rules will be added to pre-filter traffic and then sent to V2Ray."))
+	translate("If enabled, iptables rules will be added to pre-filter traffic and then sent to Xray."))
 o:value("default", translate("Default"))
 o:value("cn_direct", translate("CN Direct"))
 o:value("cn_proxy", translate("CN Proxy"))
@@ -105,7 +105,7 @@ o:value("ripe", "RIPE")
 o:value("iana", "IANA")
 
 o = s:option(DummyValue, "_chnroutelist", translate("CHNRoute"), ssl_note)
-o.template = "v2ray/list_status"
+o.template = "xray/list_status"
 o.listtype = "chnroute"
 o.updatebtn = has_ssl
 
@@ -116,7 +116,7 @@ o:value("bitbucket", "Bitbucket")
 o:value("pagure", "Pagure")
 
 o = s:option(DummyValue, "_gfwlist", translate("GFWList"), ssl_note)
-o.template = "v2ray/list_status"
+o.template = "xray/list_status"
 o.listtype = "gfwlist"
 o.updatebtn = has_ssl
 
@@ -125,12 +125,12 @@ o = s:option(TextValue, "_proxy_list", translate("Extra proxy list"),
 o.wrap = "off"
 o.rows = 5
 o.datatype = "string"
-o.filepath = "/etc/v2ray/proxylist.txt"
-o.cfgvalue = v2ray.textarea_cfgvalue
-o.write = v2ray.textarea_write
-o.remove = v2ray.textarea_remove
+o.filepath = "/etc/xray/proxylist.txt"
+o.cfgvalue = xray.textarea_cfgvalue
+o.write = xray.textarea_write
+o.remove = xray.textarea_remove
 o.parse = function(...)
-	list_changed = v2ray.textarea_parse(...)
+	list_changed = xray.textarea_parse(...)
 end
 
 o = s:option(TextValue, "_direct_list", translate("Extra direct list"),
@@ -138,12 +138,12 @@ o = s:option(TextValue, "_direct_list", translate("Extra direct list"),
 o.wrap = "off"
 o.rows = 5
 o.datatype = "string"
-o.filepath = "/etc/v2ray/directlist.txt"
-o.cfgvalue = v2ray.textarea_cfgvalue
-o.write = v2ray.textarea_write
-o.remove = v2ray.textarea_remove
+o.filepath = "/etc/xray/directlist.txt"
+o.cfgvalue = xray.textarea_cfgvalue
+o.write = xray.textarea_write
+o.remove = xray.textarea_remove
 o.parse = function(...)
-	list_changed = v2ray.textarea_parse(...)
+	list_changed = xray.textarea_parse(...)
 end
 
 o = s:option(Value, "proxy_list_dns", translate("Proxy list DNS"),
@@ -157,12 +157,12 @@ o = s:option(TextValue, "_src_direct_list", translate("Local devices direct outb
 o.wrap = "off"
 o.rows = 3
 o.datatype = "string"
-o.filepath = "/etc/v2ray/srcdirectlist.txt"
-o.cfgvalue = v2ray.textarea_cfgvalue
-o.write = v2ray.textarea_write
-o.remove = v2ray.textarea_remove
+o.filepath = "/etc/xray/srcdirectlist.txt"
+o.cfgvalue = xray.textarea_cfgvalue
+o.write = xray.textarea_write
+o.remove = xray.textarea_remove
 o.parse = function(...)
-	list_changed = v2ray.textarea_parse(...)
+	list_changed = xray.textarea_parse(...)
 end
 
 return m

@@ -8,25 +8,25 @@ local dsp = require "luci.dispatcher"
 -%>
 
 <div class="cbi-section">
-	<p id="v2ray_status"><em><%:Collecting data...%></em></p>
+	<p id="xray_status"><em><%:Collecting data...%></em></p>
 </div>
 
 <script type="text/javascript">//<![CDATA[
-	XHR.poll(5, '<%=dsp.build_url("admin/services/v2ray/status")%>', null,
+	XHR.poll(5, '<%=dsp.build_url("admin/services/xray/status")%>', null,
 		function (x, data)
 		{
 			if (x.status !== 200 || !data)
 			{
 				return;
 			}
-			var v2rayStatusElm = document.getElementById('v2ray_status');
-			v2rayStatusElm.innerHTML = data.running
+			var xrayStatusElm = document.getElementById('xray_status');
+			xrayStatusElm.innerHTML = data.running
 				? '<%:Running%>'
 				: '<%:Not Running%>';
 		}
 	);
 
-	(new XHR()).get('<%=dsp.build_url("admin/services/v2ray/version")%>', null,
+	(new XHR()).get('<%=dsp.build_url("admin/services/xray/version")%>', null,
 		function(x, data)
 		{
 			if (x.status !== 200 || !data)
@@ -36,7 +36,7 @@ local dsp = require "luci.dispatcher"
 
 			var s, d;
 
-			if ((s = document.getElementById('cbi-v2ray-main-v2ray_file')) && (d = s.getElementsByClassName('cbi-value-description')))
+			if ((s = document.getElementById('cbi-xray-main-xray_file')) && (d = s.getElementsByClassName('cbi-value-description')))
 			{
 				d[0].innerHTML = data.valid
 					? String.format('<%:Version: %s%>', data.version)

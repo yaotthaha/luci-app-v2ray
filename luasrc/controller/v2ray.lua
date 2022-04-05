@@ -5,76 +5,76 @@ local http = require "luci.http"
 local uci = require "luci.model.uci".cursor()
 local sys = require "luci.sys"
 local fs = require "nixio.fs"
-local v2ray = require "luci.model.v2ray"
+local xray = require "luci.model.xray"
 local i18n = require "luci.i18n"
 local util = require "luci.util"
 
-module("luci.controller.v2ray", package.seeall)
+module("luci.controller.xray", package.seeall)
 
 function index()
-	if not nixio.fs.access("/etc/config/v2ray") then
+	if not nixio.fs.access("/etc/config/xray") then
 		return
 	end
 
-	entry({"admin", "services", "v2ray"},
-		firstchild(), _("V2Ray")).dependent = false
+	entry({"admin", "services", "xray"},
+		firstchild(), _("Xray")).dependent = false
 
-	entry({"admin", "services", "v2ray", "global"},
-		cbi("v2ray/main"), _("Global Settings"), 1)
+	entry({"admin", "services", "xray", "global"},
+		cbi("xray/main"), _("Global Settings"), 1)
 
-	entry({"admin", "services", "v2ray", "inbounds"},
-		arcombine(cbi("v2ray/inbound-list"), cbi("v2ray/inbound-detail")),
+	entry({"admin", "services", "xray", "inbounds"},
+		arcombine(cbi("xray/inbound-list"), cbi("xray/inbound-detail")),
 		_("Inbound"), 2).leaf = true
 
-	entry({"admin", "services", "v2ray", "outbounds"},
-		arcombine(cbi("v2ray/outbound-list"), cbi("v2ray/outbound-detail")),
+	entry({"admin", "services", "xray", "outbounds"},
+		arcombine(cbi("xray/outbound-list"), cbi("xray/outbound-detail")),
 		_("Outbound"), 3).leaf = true
 
-	entry({"admin", "services", "v2ray", "dns"},
-		cbi("v2ray/dns"), _("DNS"), 4)
+	entry({"admin", "services", "xray", "dns"},
+		cbi("xray/dns"), _("DNS"), 4)
 
-	entry({"admin", "services", "v2ray", "routing"},
-		arcombine(cbi("v2ray/routing"), cbi("v2ray/routing-rule-detail")),
+	entry({"admin", "services", "xray", "routing"},
+		arcombine(cbi("xray/routing"), cbi("xray/routing-rule-detail")),
 		_("Routing"), 5)
 
-	entry({"admin", "services", "v2ray", "policy"},
-		arcombine(cbi("v2ray/policy"), cbi("v2ray/policy-level-detail")),
+	entry({"admin", "services", "xray", "policy"},
+		arcombine(cbi("xray/policy"), cbi("xray/policy-level-detail")),
 		_("Policy"), 6)
 
-	entry({"admin", "services", "v2ray", "reverse"},
-		cbi("v2ray/reverse"), _("Reverse"), 7)
+	entry({"admin", "services", "xray", "reverse"},
+		cbi("xray/reverse"), _("Reverse"), 7)
 
-	entry({"admin", "services", "v2ray", "transparent-proxy"},
-		cbi("v2ray/transparent-proxy"), _("Transparent Proxy"), 8)
+	entry({"admin", "services", "xray", "transparent-proxy"},
+		cbi("xray/transparent-proxy"), _("Transparent Proxy"), 8)
 
-	entry({"admin", "services", "v2ray", "about"},
-		form("v2ray/about"), _("About"), 9)
+	entry({"admin", "services", "xray", "about"},
+		form("xray/about"), _("About"), 9)
 
-	entry({"admin", "services", "v2ray", "routing", "rules"},
-		cbi("v2ray/routing-rule-detail")).leaf = true
+	entry({"admin", "services", "xray", "routing", "rules"},
+		cbi("xray/routing-rule-detail")).leaf = true
 
-	entry({"admin", "services", "v2ray", "policy", "levels"},
-		cbi("v2ray/policy-level-detail")).leaf = true
+	entry({"admin", "services", "xray", "policy", "levels"},
+		cbi("xray/policy-level-detail")).leaf = true
 
-	entry({"admin", "services", "v2ray", "status"}, call("action_status"))
+	entry({"admin", "services", "xray", "status"}, call("action_status"))
 
-	entry({"admin", "services", "v2ray", "version"}, call("action_version"))
+	entry({"admin", "services", "xray", "version"}, call("action_version"))
 
-	entry({"admin", "services", "v2ray", "list-status"},
+	entry({"admin", "services", "xray", "list-status"},
 		call("list_status")).leaf = true
 
-	entry({"admin", "services", "v2ray", "list-update"}, call("list_update"))
+	entry({"admin", "services", "xray", "list-update"}, call("list_update"))
 
-	entry({"admin", "services", "v2ray", "import-outbound"}, call("import_outbound"))
+	entry({"admin", "services", "xray", "import-outbound"}, call("import_outbound"))
 end
 
 function action_status()
 	local running = false
 
-	local pid = util.trim(fs.readfile("/var/run/v2ray.main.pid") or "")
+	local pid = util.trim(fs.readfile("/var/run/xray.main.pid") or "")
 
 	if pid ~= "" then
-		local file = uci:get("v2ray", "main", "v2ray_file") or ""
+		local file = uci:get("xray", "main", "xray_file") or ""
 		if file ~= "" then
 			local file_name = fs.basename(file)
 			running = sys.call("pidof %s 2>/dev/null | grep -q %s" % { file_name, pid }) == 0
@@ -88,14 +88,14 @@ function action_status()
 end
 
 function action_version()
-	local file = uci:get("v2ray", "main", "v2ray_file") or ""
+	local file = uci:get("xray", "main", "xray_file") or ""
 
 	local info
 
 	if file == "" or not fs.stat(file) then
 		info = {
 			valid = false,
-			message = i18n.translate("Invalid V2Ray file")
+			message = i18n.translate("Invalid Xray file")
 		}
 	else
 		if not fs.access(file, "rwx", "rx", "rx") then
@@ -112,7 +112,7 @@ function action_version()
 		else
 			info = {
 				valid = false,
-				message = i18n.translate("Can't get V2Ray version")
+				message = i18n.translate("Can't get Xray version")
 			}
 		end
 	end
@@ -124,10 +124,10 @@ end
 function list_status(type)
 	if type == "chnroute" then
 		http.prepare_content("application/json")
-		http.write_json(v2ray.get_routelist_status())
+		http.write_json(xray.get_routelist_status())
 	elseif type == "gfwlist" then
 		http.prepare_content("application/json")
-		http.write_json(v2ray.get_gfwlist_status())
+		http.write_json(xray.get_gfwlist_status())
 	else
 		http.status(500, "Bad address")
 	end
@@ -137,14 +137,14 @@ function list_update()
 	local type = http.formvalue("type")
 
 	if type == "chnroute" then
-		local chnroute_result, chnroute6_result = v2ray.generate_routelist()
+		local chnroute_result, chnroute6_result = xray.generate_routelist()
 		http.prepare_content("application/json")
 		http.write_json({
 			chnroute = chnroute_result,
 			chnroute6 = chnroute6_result
 		})
 	elseif type == "gfwlist" then
-		local result = v2ray.generate_gfwlist()
+		local result = xray.generate_gfwlist()
 		http.prepare_content("application/json")
 		http.write_json({
 			gfwlist = result
@@ -157,7 +157,7 @@ end
 function import_outbound()
 	local link = http.formvalue("link")
 
-	local objs = v2ray.parse_vmess_links(link or "")
+	local objs = xray.parse_vmess_links(link or "")
 
 	if not objs or #objs == 0 then
 		http.prepare_content("application/json")
@@ -193,7 +193,7 @@ function import_outbound()
 
 	for i=1, #objs do
 		local obj = objs[i]
-		local section_name = uci:add("v2ray", "outbound")
+		local section_name = uci:add("xray", "outbound")
 
 		if not section_name then
 			http.prepare_content("application/json")
@@ -210,13 +210,13 @@ function import_outbound()
 
 		local alias = obj["ps"] or string.format("%s:%s", address, port)
 
-		uci:set("v2ray", section_name, "alias", alias)
-		uci:set("v2ray", section_name, "protocol", "vmess")
-		uci:set("v2ray", section_name, "s_vmess_address", address)
-		uci:set("v2ray", section_name, "s_vmess_port", port)
-		uci:set("v2ray", section_name, "s_vmess_user_id", obj["id"] or "")
-		uci:set("v2ray", section_name, "s_vmess_user_alter_id", obj["aid"] or "")
-		uci:set("v2ray", section_name, "ss_security", tls)
+		uci:set("xray", section_name, "alias", alias)
+		uci:set("xray", section_name, "protocol", "vmess")
+		uci:set("xray", section_name, "s_vmess_address", address)
+		uci:set("xray", section_name, "s_vmess_port", port)
+		uci:set("xray", section_name, "s_vmess_user_id", obj["id"] or "")
+		uci:set("xray", section_name, "s_vmess_user_alter_id", obj["aid"] or "")
+		uci:set("xray", section_name, "ss_security", tls)
 
 		local network = obj["net"] or ""
 		local header_type = obj["type"] or ""
@@ -229,57 +229,57 @@ function import_outbound()
 		end
 
 		if network == "tcp" then
-			uci:set("v2ray", section_name, "ss_network", "tcp")
+			uci:set("xray", section_name, "ss_network", "tcp")
 
-			uci:set("v2ray", section_name, "ss_tcp_header_type", header_type)
+			uci:set("xray", section_name, "ss_tcp_header_type", header_type)
 
 			if header_type == "http" and next(hosts) then
 				local host_header = string.format("Host=%s", hosts[1])
-				uci:set_list("v2ray", section_name, "ss_tcp_header_request_headers", host_header)
+				uci:set_list("xray", section_name, "ss_tcp_header_request_headers", host_header)
 
 				if tls == "tls" then
-					uci:set("v2ray", section_name, "ss_tls_server_name", hosts[1])
+					uci:set("xray", section_name, "ss_tls_server_name", hosts[1])
 				end
 			end
 		elseif network == "kcp" or network == "mkcp" then
-			uci:set("v2ray", section_name, "ss_network", "kcp")
-			uci:set("v2ray", section_name, "ss_kcp_header_type", header_type)
+			uci:set("xray", section_name, "ss_network", "kcp")
+			uci:set("xray", section_name, "ss_kcp_header_type", header_type)
 		elseif network == "ws" then
-			uci:set("v2ray", section_name, "ss_network", "ws")
-			uci:set("v2ray", section_name, "ss_websocket_path", path)
+			uci:set("xray", section_name, "ss_network", "ws")
+			uci:set("xray", section_name, "ss_websocket_path", path)
 
 			if next(hosts) then
 				local host_header = string.format("Host=%s", hosts[1])
-				uci:set_list("v2ray", section_name, "ss_websocket_headers", host_header)
+				uci:set_list("xray", section_name, "ss_websocket_headers", host_header)
 
 				if tls == "tls" then
-					uci:set("v2ray", section_name, "ss_tls_server_name", hosts[1])
+					uci:set("xray", section_name, "ss_tls_server_name", hosts[1])
 				end
 			end
 		elseif network == "http" or network == "h2" then
-			uci:set("v2ray", section_name, "ss_network", "http")
-			uci:set("v2ray", section_name, "ss_http_path", path)
+			uci:set("xray", section_name, "ss_network", "http")
+			uci:set("xray", section_name, "ss_http_path", path)
 
 			if next(hosts) then
-				uci:set_list("v2ray", section_name, "ss_http_host", hosts)
-				uci:set("v2ray", section_name, "ss_tls_server_name", hosts[1])
+				uci:set_list("xray", section_name, "ss_http_host", hosts)
+				uci:set("xray", section_name, "ss_tls_server_name", hosts[1])
 			end
 		elseif network == "quic" then
-			uci:set("v2ray", section_name, "ss_network", "quic")
-			uci:set("v2ray", section_name, "ss_quic_header_type", header_type)
-			uci:set("v2ray", section_name, "ss_quic_key", path)
+			uci:set("xray", section_name, "ss_network", "quic")
+			uci:set("xray", section_name, "ss_quic_header_type", header_type)
+			uci:set("xray", section_name, "ss_quic_key", path)
 
 			if next(hosts) then
-				uci:set("v2ray", section_name, "ss_quic_security", hosts[1])
+				uci:set("xray", section_name, "ss_quic_security", hosts[1])
 
 				if tls == "tls" then
-					uci:set("v2ray", section_name, "ss_tls_server_name", hosts[1])
+					uci:set("xray", section_name, "ss_tls_server_name", hosts[1])
 				end
 			end
 		end
 	end
 
-	local success = uci:save("v2ray")
+	local success = uci:save("xray")
 
 	if not success then
 		http.prepare_content("application/json")

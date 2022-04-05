@@ -17,6 +17,6 @@ indent_size = 2
 indent_style = space
 indent_size = 2
 
-[{v2ray,40_luci-v2ray,firewall.v2ray}]
+[{xray,40_luci-xray,firewall.xray}]
 indent_style = tab
 indent_size = 2

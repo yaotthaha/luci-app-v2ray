@@ -7,11 +7,11 @@ local m, s, o
 
 local sid = arg[1]
 
-m = Map("v2ray", "%s - %s" % { translate("V2Ray"), translate("Edit Policy Level") },
-	translatef("Details: %s", "<a href=\"https://www.v2ray.com/en/configuration/policy.html#levelpolicyobject\" target=\"_blank\">LevelPolicyObject</a>"))
-m.redirect = dsp.build_url("admin/services/v2ray/policy")
+m = Map("xray", "%s - %s" % { translate("Xray"), translate("Edit Policy Level") },
+	translatef("Details: %s", "<a href=\"https://www.xray.com/en/configuration/policy.html#levelpolicyobject\" target=\"_blank\">LevelPolicyObject</a>"))
+m.redirect = dsp.build_url("admin/services/xray/policy")
 
-if m.uci:get("v2ray", sid) ~= "policy_level" then
+if m.uci:get("xray", sid) ~= "policy_level" then
 	luci.http.redirect(m.redirect)
 	return
 end

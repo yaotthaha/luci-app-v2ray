@@ -5,18 +5,18 @@ local dsp = require "luci.dispatcher"
 
 local m, s, o
 
-m = Map("v2ray", "%s - %s" % { translate("V2Ray"), translate("Inbound") })
+m = Map("xray", "%s - %s" % { translate("Xray"), translate("Inbound") })
 
 s = m:section(TypedSection, "inbound")
 s.anonymous = true
 s.addremove = true
 s.sortable = true
 s.template = "cbi/tblsection"
-s.extedit = dsp.build_url("admin/services/v2ray/inbounds/%s")
+s.extedit = dsp.build_url("admin/services/xray/inbounds/%s")
 s.create = function (...)
 	local sid = TypedSection.create(...)
 	if sid then
-		m.uci:save("v2ray")
+		m.uci:save("xray")
 		luci.http.redirect(s.extedit % sid)
 		return
 	end

@@ -10,7 +10,7 @@ local dsp = require "luci.dispatcher"
 <%+cbi/valueheader%>
 
 <script type="text/javascript">//<![CDATA[
-	(new XHR()).get('<%=dsp.build_url("admin/services/v2ray/list-status")%>/<%=self.listtype%>', null,
+	(new XHR()).get('<%=dsp.build_url("admin/services/xray/list-status")%>/<%=self.listtype%>', null,
 		function(x, data)
 		{
 			var s;
@@ -30,7 +30,7 @@ local dsp = require "luci.dispatcher"
     btn.disabled = true;
     btn.value    = '<%:Updating...%>';
 
-    (new XHR()).post('<%=dsp.build_url("admin/services/v2ray/list-update")%>',
+    (new XHR()).post('<%=dsp.build_url("admin/services/xray/list-update")%>',
 			{ token: '<%=token%>', type: '<%=self.listtype%>' },
 			function(x, data)
 			{

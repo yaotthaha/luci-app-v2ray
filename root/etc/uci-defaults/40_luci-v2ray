@@ -4,84 +4,84 @@
 # Licensed to the public under the MIT License.
 #
 
-# v2ray main
-v2ray=$(uci -q get v2ray.main)
-if [ "x$v2ray" != "xv2ray" ] ; then
+# xray main
+xray=$(uci -q get xray.main)
+if [ "x$xray" != "xxray" ] ; then
 	uci -q batch <<-EOF >/dev/null
-		add v2ray v2ray
-		rename v2ray.@v2ray[-1]="main"
-		set v2ray.main.enabled="0"
-		commit v2ray
+		add xray xray
+		rename xray.@xray[-1]="main"
+		set xray.main.enabled="0"
+		commit xray
 	EOF
 fi
 
 # dns
-dns=$(uci -q get v2ray.main_dns)
+dns=$(uci -q get xray.main_dns)
 if [ "x$dns" != "xdns" ] ; then
 	uci -q batch <<-EOF >/dev/null
-		add v2ray dns
-		rename v2ray.@dns[-1]="main_dns"
-		set v2ray.main_dns.enabled="0"
-		commit v2ray
+		add xray dns
+		rename xray.@dns[-1]="main_dns"
+		set xray.main_dns.enabled="0"
+		commit xray
 	EOF
 fi
 
 # routing
-routing=$(uci -q get v2ray.main_routing)
+routing=$(uci -q get xray.main_routing)
 if [ "x$routing" != "xrouting" ] ; then
 	uci -q batch <<-EOF >/dev/null
-		add v2ray routing
-		rename v2ray.@routing[-1]="main_routing"
-		set v2ray.main_routing.enabled="0"
-		commit v2ray
+		add xray routing
+		rename xray.@routing[-1]="main_routing"
+		set xray.main_routing.enabled="0"
+		commit xray
 	EOF
 fi
 
 # policy
-policy=$(uci -q get v2ray.main_policy)
+policy=$(uci -q get xray.main_policy)
 if [ "x$policy" != "xpolicy" ] ; then
 	uci -q batch <<-EOF >/dev/null
-		add v2ray policy
-		rename v2ray.@policy[-1]="main_policy"
-		set v2ray.main_policy.enabled="0"
-		commit v2ray
+		add xray policy
+		rename xray.@policy[-1]="main_policy"
+		set xray.main_policy.enabled="0"
+		commit xray
 	EOF
 fi
 
 # reverse
-reverse=$(uci -q get v2ray.main_reverse)
+reverse=$(uci -q get xray.main_reverse)
 if [ "x$reverse" != "xreverse" ] ; then
 	uci -q batch <<-EOF >/dev/null
-		add v2ray reverse
-		rename v2ray.@reverse[-1]="main_reverse"
-		set v2ray.main_reverse.enabled="0"
-		commit v2ray
+		add xray reverse
+		rename xray.@reverse[-1]="main_reverse"
+		set xray.main_reverse.enabled="0"
+		commit xray
 	EOF
 fi
 
 # transparent_proxy
-transparent_proxy=$(uci -q get v2ray.main_transparent_proxy)
+transparent_proxy=$(uci -q get xray.main_transparent_proxy)
 if [ "x$transparent_proxy" != "xtransparent_proxy" ] ; then
 	uci -q batch <<-EOF >/dev/null
-		add v2ray transparent_proxy
-		rename v2ray.@transparent_proxy[-1]="main_transparent_proxy"
-		set v2ray.main_transparent_proxy.redirect_port=""
-		commit v2ray
+		add xray transparent_proxy
+		rename xray.@transparent_proxy[-1]="main_transparent_proxy"
+		set xray.main_transparent_proxy.redirect_port=""
+		commit xray
 	EOF
 fi
 
 uci -q batch <<-EOF >/dev/null
-	delete ucitrack.@v2ray[-1]
-	add ucitrack v2ray
-	set ucitrack.@v2ray[-1].init=v2ray
+	delete ucitrack.@xray[-1]
+	add ucitrack xray
+	set ucitrack.@xray[-1].init=xray
 	commit ucitrack
 
-	delete firewall.v2ray
-	set firewall.v2ray=include
-	set firewall.v2ray.type=script
-	set firewall.v2ray.path=/etc/firewall.v2ray
-	set firewall.v2ray.family=any
-	set firewall.v2ray.reload=1
+	delete firewall.xray
+	set firewall.xray=include
+	set firewall.xray.type=script
+	set firewall.xray.path=/etc/firewall.xray
+	set firewall.xray.family=any
+	set firewall.xray.reload=1
 	commit firewall
 EOF
 

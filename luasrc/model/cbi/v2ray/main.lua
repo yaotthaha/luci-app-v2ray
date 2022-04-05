@@ -5,13 +5,13 @@ local uci = require "luci.model.uci".cursor()
 local util = require "luci.util"
 local sys = require "luci.sys"
 local json = require "luci.jsonc"
-local v2ray = require "luci.model.v2ray"
+local xray = require "luci.model.xray"
 
 local m, s, o
 
 local inbound_keys, inbound_table, outbound_keys, outbound_table = {}, {}, {}, {}
 
-uci:foreach("v2ray", "inbound", function(s)
+uci:foreach("xray", "inbound", function(s)
 	if s.alias then
 		local key = s[".name"]
 		util.append(inbound_keys, key)
@@ -19,7 +19,7 @@ uci:foreach("v2ray", "inbound", function(s)
 	end
 end)
 
-uci:foreach("v2ray", "outbound", function(s)
+uci:foreach("xray", "outbound", function(s)
 	if s.alias then
 		local key = s[".name"]
 		util.append(outbound_keys, key)
@@ -27,15 +27,15 @@ uci:foreach("v2ray", "outbound", function(s)
 	end
 end)
 
-m = Map("v2ray", "%s - %s" % { translate("V2Ray"), translate("Global Settings") },
+m = Map("xray", "%s - %s" % { translate("Xray"), translate("Global Settings") },
 "<p>%s</p><p>%s</p>" % {
 	translate("A platform for building proxies to bypass network restrictions."),
 	translatef("For more information, please visit: %s",
-		"<a href=\"https://www.v2ray.com\" target=\"_blank\">https://www.v2ray.com</a>")
+		"<a href=\"https://www.xray.com\" target=\"_blank\">https://www.xray.com</a>")
 })
-m:append(Template("v2ray/status_header"))
+m:append(Template("xray/status_header"))
 
-s = m:section(NamedSection, "main", "v2ray")
+s = m:section(NamedSection, "main", "xray")
 s.addremove = false
 s.anonymos = true
 
@@ -45,21 +45,21 @@ o.rmempty = false
 o = s:option(Button, "_reload", translate("Reload Service"), translate("This will restart service when config file changes."))
 o.inputstyle = "reload"
 o.write = function ()
-	sys.call("/etc/init.d/v2ray reload 2>/dev/null")
+	sys.call("/etc/init.d/xray reload 2>/dev/null")
 end
 
-o = s:option(Value, "v2ray_file", translate("V2Ray file"), "<em>%s</em>" % translate("Collecting data..."))
+o = s:option(Value, "xray_file", translate("Xray file"), "<em>%s</em>" % translate("Collecting data..."))
 o.datatype = "file"
-o.placeholder = "/usr/bin/v2ray"
+o.placeholder = "/usr/bin/xray"
 o.rmempty = false
 
-o = s:option(Value, "asset_location", translate("V2Ray asset location"),
-	translate("Directory where geoip.dat and geosite.dat files are, default: same directory as V2Ray file."))
+o = s:option(Value, "asset_location", translate("Xray asset location"),
+	translate("Directory where geoip.dat and geosite.dat files are, default: same directory as Xray file."))
 o.datatype = "directory"
 o.placeholder = "/usr/bin"
 
 o = s:option(Value, "mem_percentage", translate("Memory percentage"),
-	translate("The maximum percentage of memory used by V2Ray."))
+	translate("The maximum percentage of memory used by Xray."))
 o.datatype = "and(uinteger, max(100))"
 o.placeholder = "80"
 
@@ -71,7 +71,7 @@ o:value("", translate("None"))
 o = s:option(Value, "access_log", translate("Access log file"))
 o:depends("config_file", "")
 o:value("/dev/null")
-o:value("/var/log/v2ray-access.log")
+o:value("/var/log/xray-access.log")
 
 o = s:option(ListValue, "loglevel", translate("Log level"))
 o:depends("config_file", "")
@@ -84,7 +84,7 @@ o.default = "warning"
 
 o = s:option(Value, "error_log", translate("Error log file"))
 o:value("/dev/null")
-o:value("/var/log/v2ray-error.log")
+o:value("/var/log/xray-error.log")
 o:depends("loglevel", "debug")
 o:depends("loglevel", "info")
 o:depends("loglevel", "warning")
@@ -114,7 +114,7 @@ o:depends("transport_enabled", "1")
 o.wrap = "off"
 o.rows = 5
 o.datatype = "string"
-o.filepath = "/etc/v2ray/transport.json"
+o.filepath = "/etc/xray/transport.json"
 o.validate = function(self, value, section)
 	if not value or value == "" then
 		return nil, translate("Transport settings is required.")
@@ -125,8 +125,8 @@ o.validate = function(self, value, section)
 	end
 	return value, nil
 end
-o.cfgvalue = v2ray.textarea_cfgvalue
-o.write = v2ray.textarea_write
-o.remove = v2ray.textarea_remove
+o.cfgvalue = xray.textarea_cfgvalue
+o.write = xray.textarea_write
+o.remove = xray.textarea_remove
 
 return m

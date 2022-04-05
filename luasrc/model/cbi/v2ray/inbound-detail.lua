@@ -9,11 +9,11 @@ local m, s, o
 
 local sid = arg[1]
 
-m = Map("v2ray", "%s - %s" % { translate("V2Ray"), translate("Edit Inbound") },
-	translatef("Details: %s", "<a href=\"https://www.v2ray.com/en/configuration/overview.html#inboundobject\" target=\"_blank\">InboundObject</a>"))
-m.redirect = dsp.build_url("admin/services/v2ray/inbounds")
+m = Map("xray", "%s - %s" % { translate("Xray"), translate("Edit Inbound") },
+	translatef("Details: %s", "<a href=\"https://www.xray.com/en/configuration/overview.html#inboundobject\" target=\"_blank\">InboundObject</a>"))
+m.redirect = dsp.build_url("admin/services/xray/inbounds")
 
-if m.uci:get("v2ray", sid) ~= "inbound" then
+if m.uci:get("xray", sid) ~= "inbound" then
 	luci.http.redirect(m.redirect)
 	return
 end
@@ -175,7 +175,7 @@ o = s:option(Flag, "s_socks_udp", "%s - %s" % { "Socks", translate("UDP") })
 o:depends("protocol", "socks")
 
 o = s:option(Value, "s_socks_ip", "%s - %s" % { "Socks", translate("IP") },
-	translate("When UDP is enabled, V2Ray needs to know the IP address of current host."))
+	translate("When UDP is enabled, Xray needs to know the IP address of current host."))
 o:depends("s_socks_udp", "1")
 for _, v in ipairs(local_ips) do
 	o:value(v)

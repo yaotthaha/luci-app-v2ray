@@ -9,11 +9,11 @@ local m, s, o
 
 local sid = arg[1]
 
-m = Map("v2ray", "%s - %s" % { translate("V2Ray"), translate("Edit Outbound") },
-	translatef("Details: %s", "<a href=\"https://www.v2ray.com/en/configuration/overview.html#outboundobject\" target=\"_blank\">OutboundObject</a>"))
-m.redirect = dsp.build_url("admin/services/v2ray/outbounds")
+m = Map("xray", "%s - %s" % { translate("Xray"), translate("Edit Outbound") },
+	translatef("Details: %s", "<a href=\"https://www.xray.com/en/configuration/overview.html#outboundobject\" target=\"_blank\">OutboundObject</a>"))
+m.redirect = dsp.build_url("admin/services/xray/outbounds")
 
-if m.uci:get("v2ray", sid) ~= "outbound" then
+if m.uci:get("xray", sid) ~= "outbound" then
 	luci.http.redirect(m.redirect)
 	return
 end

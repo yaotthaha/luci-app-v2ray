@@ -15,7 +15,7 @@ git:
   submodules: false
 env:
   global:
-    - PACKAGE=luci-app-v2ray
+    - PACKAGE=luci-app-xray
     - SDK_PATH=https://downloads.openwrt.org/releases/18.06.8/targets/x86/64
     - SDK=-sdk-18.06.8-x86-64_
     - CONFIG_CCACHE=y
@@ -59,7 +59,7 @@ script:
   - make defconfig
   - make package/$PACKAGE/{clean,compile} -j2
   - find "$SDK_HOME/bin/"
-  - find "$SDK_HOME/bin/" -name luci-*-v2ray*.ipk -exec cp {} "$TRAVIS_BUILD_DIR" \;
+  - find "$SDK_HOME/bin/" -name luci-*-xray*.ipk -exec cp {} "$TRAVIS_BUILD_DIR" \;
   - ls -hl "$TRAVIS_BUILD_DIR" | grep .*\.ipk
 after_failure:
   - cd "$SDK_HOME"

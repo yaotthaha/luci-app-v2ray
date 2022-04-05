@@ -5,31 +5,31 @@ local uci = require "luci.model.uci".cursor()
 local util = require "luci.util"
 local fs = require "nixio.fs"
 
-local config_file = uci:get("v2ray", "main", "config_file")
+local config_file = uci:get("xray", "main", "config_file")
 
 if not config_file or util.trim(config_file) == "" then
-	config_file = "/var/etc/v2ray/v2ray.main.json"
+	config_file = "/var/etc/xray/xray.main.json"
 end
 
 local config_content = fs.readfile(config_file) or translate("Failed to open file.")
 
 local m
 
-m = SimpleForm("v2ray", "%s - %s" % { translate("V2Ray"), translate("About") },
+m = SimpleForm("xray", "%s - %s" % { translate("Xray"), translate("About") },
 	"<p>%s</p><p>%s</p><p>%s</p><p>%s</p><p>%s</p><p>%s</p><p>%s</p><p>%s</p>" % {
-		translate("LuCI support for V2Ray."),
+		translate("LuCI support for Xray."),
 		translatef("Author: %s", "Xingwang Liao"),
 		translatef(
 			"Source: %s",
-			"<a href=\"https://github.com/kuoruan/luci-app-v2ray\" target=\"_blank\">https://github.com/kuoruan/luci-app-v2ray</a>"
+			"<a href=\"https://github.com/kuoruan/luci-app-xray\" target=\"_blank\">https://github.com/kuoruan/luci-app-xray</a>"
 		),
 		translatef(
 			"Latest: %s",
-			"<a href=\"https://github.com/kuoruan/luci-app-v2ray/releases/latest\" target=\"_blank\">https://github.com/kuoruan/luci-app-v2ray/releases/latest</a>"
+			"<a href=\"https://github.com/kuoruan/luci-app-xray/releases/latest\" target=\"_blank\">https://github.com/kuoruan/luci-app-xray/releases/latest</a>"
 		),
 		translatef(
 			"Report Bugs: %s",
-			"<a href=\"https://github.com/kuoruan/luci-app-v2ray/issues\" target=\"_blank\">https://github.com/kuoruan/luci-app-v2ray/issues</a>"
+			"<a href=\"https://github.com/kuoruan/luci-app-xray/issues\" target=\"_blank\">https://github.com/kuoruan/luci-app-xray/issues</a>"
 		),
 		translatef(
 			"Donate: %s",

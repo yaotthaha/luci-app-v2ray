@@ -9,7 +9,7 @@ local m, s1, s2, o
 
 local level_keys, level_table = {}, {}
 
-uci:foreach("v2ray", "policy_level", function(s)
+uci:foreach("xray", "policy_level", function(s)
 	if s.level then
 		local key = s[".name"]
 		util.append(level_keys, key)
@@ -17,8 +17,8 @@ uci:foreach("v2ray", "policy_level", function(s)
 	end
 end)
 
-m = Map("v2ray", "%s - %s" % { translate("V2Ray"), translate("Policy") },
-	translatef("Details: %s", "<a href=\"https://www.v2ray.com/en/configuration/policy.html#policyobject\" target=\"_blank\">PolicyObject</a>"))
+m = Map("xray", "%s - %s" % { translate("Xray"), translate("Policy") },
+	translatef("Details: %s", "<a href=\"https://www.xray.com/en/configuration/policy.html#policyobject\" target=\"_blank\">PolicyObject</a>"))
 
 s1 = m:section(NamedSection, "main_policy", "policy")
 s1.anonymous = true
@@ -41,11 +41,11 @@ s2.anonymous = true
 s2.addremove = true
 s2.sortable = true
 s2.template = "cbi/tblsection"
-s2.extedit = dsp.build_url("admin/services/v2ray/policy/levels/%s")
+s2.extedit = dsp.build_url("admin/services/xray/policy/levels/%s")
 s2.create = function (...)
 	local sid = TypedSection.create(...)
 	if sid then
-		m.uci:save("v2ray")
+		m.uci:save("xray")
 		luci.http.redirect(s2.extedit % sid)
 		return
 	end

@@ -7,7 +7,7 @@ local sys = require "luci.sys"
 local uci = require "luci.model.uci".cursor()
 local json = require "luci.jsonc"
 
-module("luci.model.v2ray", package.seeall)
+module("luci.model.xray", package.seeall)
 
 local gfwlist_urls = {
 	["github"] = "https://raw.githubusercontent.com/gfwlist/gfwlist/master/gfwlist.txt",
@@ -26,12 +26,12 @@ local apnic_delegated_urls = {
 local apnic_delegated_extended_url = "https://ftp.apnic.net/stats/apnic/delegated-apnic-extended-latest"
 local cn_zone_url = "http://www.ipdeny.com/ipblocks/data/countries/cn.zone"
 
-local gfwlist_file = "/etc/v2ray/gfwlist.txt"
-local chnroute_file_ipv4 = "/etc/v2ray/chnroute.txt"
-local chnroute_file_ipv6 = "/etc/v2ray/chnroute6.txt"
+local gfwlist_file = "/etc/xray/gfwlist.txt"
+local chnroute_file_ipv4 = "/etc/xray/chnroute.txt"
+local chnroute_file_ipv6 = "/etc/xray/chnroute6.txt"
 
 function generate_gfwlist()
-	local gfwlist_mirror = uci:get("v2ray", "main_transparent_proxy", "gfwlist_mirror") or "github"
+	local gfwlist_mirror = uci:get("xray", "main_transparent_proxy", "gfwlist_mirror") or "github"
 
 	local gfwlist_url = gfwlist_urls[gfwlist_mirror]
 
@@ -110,7 +110,7 @@ function generate_gfwlist()
 end
 
 function generate_routelist()
-	local apnic_delegated_mirror = uci:get("v2ray", "main_transparent_proxy", "apnic_delegated_mirror") or "apnic"
+	local apnic_delegated_mirror = uci:get("xray", "main_transparent_proxy", "apnic_delegated_mirror") or "apnic"
 
 	local apnic_delegated_url = apnic_delegated_urls[apnic_delegated_mirror]
 

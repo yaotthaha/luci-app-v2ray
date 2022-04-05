@@ -1,20 +1,20 @@
 {
-	"luci-app-v2ray": {
-		"description": "Grant access for luci-app-v2ray",
+	"luci-app-xray": {
+		"description": "Grant access for luci-app-xray",
 		"read": {
 			"file": {
-				"/etc/firewall.v2ray": ["read"],
-				"/etc/v2ray/*": ["read"]
+				"/etc/firewall.xray": ["read"],
+				"/etc/xray/*": ["read"]
 			},
-			"uci": ["dhcp", "firewall", "v2ray"]
+			"uci": ["dhcp", "firewall", "xray"]
 		},
 		"write": {
 			"file": {
-				"/etc/v2ray/*": ["write"],
+				"/etc/xray/*": ["write"],
 				"/etc/init.d/firewall": ["exec"],
-				"/etc/init.d/v2ray": ["exec"]
+				"/etc/init.d/xray": ["exec"]
 			},
-			"uci": ["dhcp", "firewall", "v2ray"]
+			"uci": ["dhcp", "firewall", "xray"]
 		}
 	}
 }

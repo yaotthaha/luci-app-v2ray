@@ -7,11 +7,11 @@ local m, s, o
 
 local sid = arg[1]
 
-m = Map("v2ray", "%s - %s" % { translate("V2Ray"), translate("Edit Routing Rule") },
-	translatef("Details: %s", "<a href=\"https://www.v2ray.com/en/configuration/routing.html#ruleobject\" target=\"_blank\">RuleObject</a>"))
-m.redirect = dsp.build_url("admin/services/v2ray/routing")
+m = Map("xray", "%s - %s" % { translate("Xray"), translate("Edit Routing Rule") },
+	translatef("Details: %s", "<a href=\"https://www.xray.com/en/configuration/routing.html#ruleobject\" target=\"_blank\">RuleObject</a>"))
+m.redirect = dsp.build_url("admin/services/xray/routing")
 
-if m.uci:get("v2ray", sid) ~= "routing_rule" then
+if m.uci:get("xray", sid) ~= "routing_rule" then
 	luci.http.redirect(m.redirect)
 	return
 end

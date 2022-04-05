@@ -9,7 +9,7 @@ local m, s1, s2, s3, o
 
 local rule_keys, rule_table, balancer_keys, balancer_table = {}, {}, {}, {}
 
-uci:foreach("v2ray", "routing_rule", function(s)
+uci:foreach("xray", "routing_rule", function(s)
 	if s.alias then
 		local key = s[".name"]
 		util.append(rule_keys, key)
@@ -17,7 +17,7 @@ uci:foreach("v2ray", "routing_rule", function(s)
 	end
 end)
 
-uci:foreach("v2ray", "routing_balancer", function(s)
+uci:foreach("xray", "routing_balancer", function(s)
 	if s.tag then
 		local key = s[".name"]
 		util.append(balancer_keys, key)
@@ -25,8 +25,8 @@ uci:foreach("v2ray", "routing_balancer", function(s)
 	end
 end)
 
-m = Map("v2ray", "%s - %s" % { translate("V2Ray"), translate("Routing") },
-	translatef("Details: %s", "<a href=\"https://www.v2ray.com/en/configuration/routing.html#routingobject\" target=\"_blank\">RoutingObject</a>"))
+m = Map("xray", "%s - %s" % { translate("Xray"), translate("Routing") },
+	translatef("Details: %s", "<a href=\"https://www.xray.com/en/configuration/routing.html#routingobject\" target=\"_blank\">RoutingObject</a>"))
 
 s1 = m:section(NamedSection, "main_routing", "routing")
 s1.anonymous = true
@@ -55,11 +55,11 @@ s2.anonymous = true
 s2.addremove = true
 s2.sortable = true
 s2.template = "cbi/tblsection"
-s2.extedit = dsp.build_url("admin/services/v2ray/routing/rules/%s")
+s2.extedit = dsp.build_url("admin/services/xray/routing/rules/%s")
 s2.create = function (...)
 	local sid = TypedSection.create(...)
 	if sid then
-		m.uci:save("v2ray")
+		m.uci:save("xray")
 		luci.http.redirect(s2.extedit % sid)
 		return
 	end
